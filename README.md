@@ -2,7 +2,7 @@
 
 A companion plugin for **[MucklisGuildCraftBrowser](https://www.curseforge.com/wow/addons/mucklis-guild-craft-browser)** (Guild Craft Browser). It turns the orders you place on the guild craft board into a ready-to-trade shopping cart: pick your orders, see exactly which reagents you still need to buy (aware of your bags, bank and alts), and drop the right materials into the trade window with one click.
 
-Built for **WoW Burning Crusade Classic – Anniversary (2.5.5)**.
+Built for **WoW Burning Crusade Classic – Anniversary (2.5.6)**.
 
 ## Features
 
