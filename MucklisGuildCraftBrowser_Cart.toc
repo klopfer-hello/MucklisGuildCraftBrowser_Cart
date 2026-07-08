@@ -4,7 +4,7 @@
 ## Notes: Gather and trade the reagents for your Guild Craft Browser orders.
 ## Notes-deDE: Sammle und handle die Materialien für deine Guild Craft Browser Aufträge.
 ## Author: lanus1337
-## Version: 2.0.1
+## Version: 2.0.2
 ## SavedVariablesPerCharacter: MGCBCartDB
 ## Dependencies: MucklisGuildCraftBrowser
 ## OptionalDeps: Syndicator, Auctionator

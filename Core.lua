@@ -101,10 +101,14 @@ local function professionIndex(professionKey)
   if g.LoadSeedProfession then pcall(g.LoadSeedProfession, canon, "GCB Cart") end
   local recipes = g.Seed and g.Seed.recipes and g.Seed.recipes[canon]
   if type(recipes) ~= "table" then return nil end
-  local idx = { byKey = {}, bySpell = {} }
+  local idx = { byKey = {}, bySpell = {}, byResult = {} }
   for _, r in ipairs(recipes) do
     if r.recipeKey then idx.byKey[r.recipeKey] = r.reagents end
     if r.spellId then idx.bySpell[r.spellId] = r.reagents end
+    -- Index item-producing recipes (potions, gear, bags, …) by their crafted
+    -- item, so orders keyed by result item still resolve. Enchants have no
+    -- resultItemId and continue to match via spell / recipeKey.
+    if r.resultItemId then idx.byResult[tonumber(r.resultItemId)] = r.reagents end
   end
   reagentIndexCache[canon] = idx
   return idx
@@ -118,6 +122,14 @@ function ns.OrderReagents(order)
   if not idx then return nil end
   local reagents = (order.recipeKey and idx.byKey[order.recipeKey])
     or (order.spellId and idx.bySpell[order.spellId])
+    or (order.resultItemId and idx.byResult[tonumber(order.resultItemId)])
+  -- Orders whose spellId couldn't be resolved get an "item:<id>" recipeKey
+  -- (see Util.CanonicalRecipeKey) — e.g. a potion. Match those against the
+  -- seed's crafted item so non-enchant crafts fill the shopping list too.
+  if type(reagents) ~= "table" and order.recipeKey then
+    local rid = tonumber(tostring(order.recipeKey):match("^item:(%d+)$"))
+    if rid then reagents = idx.byResult[rid] end
+  end
   if type(reagents) ~= "table" then return nil end
   local qty = tonumber(order.quantity) or 1
   if qty < 1 then qty = 1 end
